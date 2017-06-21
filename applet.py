@@ -7,21 +7,26 @@ from urllib2 import Request, urlopen, URLError
 from gi.repository import Gtk as gtk
 from gi.repository import AppIndicator3 as appindicator
 from gi.repository import Notify as notify
+from gi.repository import GObject
 
 import threading
 import time
 
 
-APPINDICATOR_ID = 'myappindicator'	
+APPINDICATOR_ID = 'getup_standup'	
 
-def repeat():
-	print("REATET")
-	notify.Notification.new("<h1>Joke 2</h1>", "ha ha", None).show()
+# getup timer in milliseconds
+TIMER = 15 * 1000
 
 
-def joke(_):
-	notify.Notification.new("<b>Joke</b>", "ha ha", None).show()
-	threading.Timer(20.0,repeat).start()
+def repeat_getup():
+	print("REAPEAT !")
+	notify.Notification.new("HEY ! Its time to stretch a bit !", "Get up and stretch yourself up !", None).show()
+	return True
+
+def get_up(_):
+	notify.Notification.new("Get up will now make you stretch-up every {} minutes".format(TIMER), "", None).show()
+	GObject.timeout_add(TIMER,repeat_getup)
 
 
 
@@ -34,22 +39,19 @@ def main():
 
 
 def build_menu():
+	
 	menu = gtk.Menu()
-	item_joke = gtk.MenuItem('Joke')
-	item_joke.connect('activate', joke)
-	menu.append(item_joke)
-	item_quit = gtk.MenuItem('Quit')
-	item_quit.connect('activate', quit)
-	menu.append(item_quit)
+	
+	getup_item = gtk.MenuItem('Start Get-Up')
+	getup_item.connect('activate', get_up)
+	menu.append(getup_item)
+
+	quit_item = gtk.MenuItem('Quit')
+	quit_item.connect('activate', quit)
+	menu.append(quit_item)
 	menu.show_all()
+
 	return menu
-
-def fetch_joke():
-	request = Request('http://api.icndb.com/jokes/random?limitTo=[nerdy]')
-	response = urlopen(request)
-	joke = json.loads(response.read())['value']['joke']
-	return joke
-
 
 
 def quit(_):
