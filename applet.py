@@ -17,17 +17,17 @@ TIMER = MINUTES  * 1000
 
 def repeat_getup():
 	print("Get Up !")
-	con = "/home/drklrd/Desktop/stuffs/applet/stop.png"
+	icon = os.getcwd() + "/resources/stop.png"
 	notify.Notification.new("HEY ! Its time to stretch a bit !", "Stop Coding , get up and stretch yourself a bit !", icon).show()
 	return True
 
 def get_up(_):
-	icon = "/home/drklrd/Desktop/stuffs/applet/timer.gif"
+	icon = os.getcwd() + "/resources/timer.gif"
 	notify.Notification.new("Get up will now make you stretch-up every {} minutes".format(MINUTES), "", icon).show()
 	GObject.timeout_add(TIMER,repeat_getup)
 
 def main():
-	indicator = appindicator.Indicator.new(APPINDICATOR_ID,  gtk.STOCK_DIALOG_INFO, appindicator.IndicatorCategory.SYSTEM_SERVICES)
+	indicator = appindicator.Indicator.new(APPINDICATOR_ID,  os.path.abspath('./resources/clock.svg'), appindicator.IndicatorCategory.SYSTEM_SERVICES)
 	indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
 	indicator.set_menu(build_menu())
 	notify.init(APPINDICATOR_ID)
