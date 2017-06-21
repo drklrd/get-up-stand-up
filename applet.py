@@ -10,10 +10,10 @@ from gi.repository import GObject
 APPINDICATOR_ID = 'getup_standup'	
 
 # timer in minutes
-MINUTES = 15
+MINUTES = 30
 
 # getup timer in milliseconds
-TIMER = MINUTES  * 1000
+TIMER = MINUTES  * 60 * 1000
 
 def repeat_getup():
 	print("Get Up !")
