@@ -2,33 +2,29 @@ import os
 import signal
 import json
 
-from urllib2 import Request, urlopen, URLError
-
 from gi.repository import Gtk as gtk
 from gi.repository import AppIndicator3 as appindicator
 from gi.repository import Notify as notify
 from gi.repository import GObject
 
-import threading
-import time
-
-
 APPINDICATOR_ID = 'getup_standup'	
 
-# getup timer in milliseconds
-TIMER = 15 * 1000
+# timer in minutes
+MINUTES = 15
 
+# getup timer in milliseconds
+TIMER = MINUTES  * 1000
 
 def repeat_getup():
-	print("REAPEAT !")
-	notify.Notification.new("HEY ! Its time to stretch a bit !", "Get up and stretch yourself up !", None).show()
+	print("Get Up !")
+	con = "/home/drklrd/Desktop/stuffs/applet/stop.png"
+	notify.Notification.new("HEY ! Its time to stretch a bit !", "Stop Coding , get up and stretch yourself a bit !", icon).show()
 	return True
 
 def get_up(_):
-	notify.Notification.new("Get up will now make you stretch-up every {} minutes".format(TIMER), "", None).show()
+	icon = "/home/drklrd/Desktop/stuffs/applet/timer.gif"
+	notify.Notification.new("Get up will now make you stretch-up every {} minutes".format(MINUTES), "", icon).show()
 	GObject.timeout_add(TIMER,repeat_getup)
-
-
 
 def main():
 	indicator = appindicator.Indicator.new(APPINDICATOR_ID,  gtk.STOCK_DIALOG_INFO, appindicator.IndicatorCategory.SYSTEM_SERVICES)
@@ -39,18 +35,14 @@ def main():
 
 
 def build_menu():
-	
 	menu = gtk.Menu()
-	
 	getup_item = gtk.MenuItem('Start Get-Up')
 	getup_item.connect('activate', get_up)
 	menu.append(getup_item)
-
 	quit_item = gtk.MenuItem('Quit')
 	quit_item.connect('activate', quit)
 	menu.append(quit_item)
 	menu.show_all()
-
 	return menu
 
 
